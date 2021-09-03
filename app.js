@@ -63,9 +63,12 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
 const galery = document.querySelector('.gallery');
 const modal = document.querySelector('.lightbox');
 const closed = document.querySelector('[data-action="close-lightbox"]')
+const bigImg = document.querySelector('.lightbox__image');
+const overlay = document.querySelector('.lightbox__overlay');
 
 let image = '';
 galleryItems.forEach(a => {
@@ -74,21 +77,34 @@ galleryItems.forEach(a => {
 
 galery.insertAdjacentHTML('afterbegin', image);
 
-const bigImg = document.querySelector('.lightbox__image');
-const clickListener = e => {
-  e.stopPropagation();
+function clickListener(r) {
+  window.addEventListener('keydown', Esckey);
+  r.stopPropagation();
   modal.classList.add('is-open');
 
-    bigImg.src = e.target.dataset.original;
+    bigImg.src = r.target.dataset.original;
   
 };
 
 galery.addEventListener('click', clickListener);
 
-const closeGallery = a => {
-  a.stopPropagation();
+function closeGallery() {
   modal.classList.remove('is-open');
   
 };
 
 closed.addEventListener('click', closeGallery);
+
+function closeBack() {
+  window.removeEventListener('keydown', Esckey);
+    closeGallery();
+}
+
+overlay.addEventListener('click', closeBack);
+
+function Esckey(e) {
+  if (e.code === 'Escape') {
+    closeGallery(); 
+  }
+}
+
